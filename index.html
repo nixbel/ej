@@ -99,16 +99,24 @@
             font-style: italic;
         }
 
-        .image-upload {
-            margin: 20px 0;
+        .image-display {
             text-align: center;
+            margin: 20px 0;
         }
 
-        .image-preview {
+        .diary-image {
             max-width: 100%;
-            margin: 10px 0;
+            max-height: 400px;
             border-radius: 5px;
-            display: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            border: 10px solid white;
+            transform: rotate(-2deg);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .diary-image:hover {
+            transform: rotate(0deg) scale(1.02);
         }
 
         .save-btn {
@@ -126,30 +134,6 @@
         }
 
         .save-btn:hover {
-            background-color: #6b4f3d;
-        }
-
-        .file-input-wrapper {
-            position: relative;
-            display: inline-block;
-            margin: 10px 0;
-        }
-
-        .file-input-wrapper input[type="file"] {
-            display: none;
-        }
-
-        .file-input-label {
-            background-color: #8b7355;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            display: inline-block;
-            transition: background-color 0.3s;
-        }
-
-        .file-input-label:hover {
             background-color: #6b4f3d;
         }
 
@@ -171,25 +155,18 @@
         <div class="journal-entry">
             <div class="date" id="current-date"></div>
             
-            <div class="image-upload">
-                <div class="file-input-wrapper">
-                    <input type="file" id="image-upload" accept="image/*" onchange="previewImage(event)">
-                    <label for="image-upload" class="file-input-label">Add Photo</label>
-                </div>
-                <img id="image-preview" class="image-preview" alt="Preview">
+            <div class="image-display">
+                <!-- Using placeholder images since we can't actually upload the user's images here -->
+                <img src="/api/placeholder/600/400" alt="Diary image" class="diary-image" id="diary-image" onclick="changeImage()">
             </div>
 
             <div class="caption-section">
-                <h2>Today's Thoughts</h2>
-                <textarea id="english-caption" placeholder="Write your thoughts here..."></textarea>
+                <p class="english-caption">The sun sets over the horizon, painting the sky with hues of orange and pink. In moments like these, I find peace and reflection on the day's journey. Nature's canvas reminds me that endings can be beautiful too.</p>
             </div>
 
             <div class="caption-section">
-                <h2>Mga Saloobin</h2>
-                <textarea id="filipino-caption" placeholder="Isulat ang iyong mga saloobin dito..."></textarea>
+                <p class="filipino-caption">Lumubog ang araw sa may dagat, pinipintahan ang kalangitan ng kulay kahel at rosas. Sa mga ganitong sandali, nakakatagpo ako ng kapayapaan at pagmumuni-muni sa paglalakbay ng araw. Ang likhang-sining ng kalikasan ay nagpapaalala sa akin na maging ang mga wakas ay maaaring maging maganda rin.</p>
             </div>
-
-            <button class="save-btn" onclick="saveEntry()">Save Entry</button>
         </div>
     </div>
 
@@ -203,33 +180,21 @@
             month: 'long', 
             day: 'numeric' 
         });
-
-        // Image preview function
-        function previewImage(event) {
-            const preview = document.getElementById('image-preview');
-            const file = event.target.files[0];
-            const reader = new FileReader();
-
-            reader.onload = function() {
-                preview.src = reader.result;
-                preview.style.display = 'block';
-            }
-
-            if (file) {
-                reader.readAsDataURL(file);
-            }
-        }
-
-        // Save entry function
-        function saveEntry() {
-            const englishCaption = document.getElementById('english-caption').value;
-            const filipinoCaption = document.getElementById('filipino-caption').value;
-            const imagePreview = document.getElementById('image-preview');
-            
-            // Here you can add functionality to save the entries
-            // For now, we'll just show an alert
-            alert('Entry saved! (Note: This is just a demo - entries are not actually saved)');
+        
+        // Image slideshow functionality
+        const images = [
+            "/api/placeholder/600/400",
+            "/api/placeholder/600/400?text=Image+2",
+            "/api/placeholder/600/400?text=Image+3",
+            "/api/placeholder/600/400?text=Image+4"
+        ];
+        
+        let currentImageIndex = 0;
+        
+        function changeImage() {
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+            document.getElementById('diary-image').src = images[currentImageIndex];
         }
     </script>
 </body>
-</html> 
+</html>
