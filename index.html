@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emo Journal</title>
+    <title>My Personal Diary</title>
     <style>
         :root {
             --dark-bg: #1a1a1a;
             --text-color: #e0e0e0;
             --accent-color: #ff69b4;
             --border-color: #333;
+            --paper-bg: #fff9e6;
         }
 
         * {
@@ -20,36 +21,51 @@
 
         body {
             background-color: var(--dark-bg);
-            color: var(--text-color);
+            color: #333;
             font-family: 'Courier New', monospace;
             line-height: 1.6;
             padding: 20px;
+            background-image: url('https://www.transparenttextures.com/patterns/paper.png');
         }
 
         .container {
             max-width: 800px;
             margin: 0 auto;
-            background-color: #222;
+            background-color: var(--paper-bg);
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%),
+                        linear-gradient(-45deg, rgba(255,255,255,0.1) 25%, transparent 25%);
+            pointer-events: none;
         }
 
         h1 {
             text-align: center;
-            color: var(--accent-color);
+            color: #333;
             margin-bottom: 30px;
             font-size: 2.5em;
-            text-transform: uppercase;
-            letter-spacing: 3px;
+            font-family: 'Brush Script MT', cursive;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
 
         .journal-entry {
             margin-bottom: 40px;
             padding: 20px;
-            border: 1px solid var(--border-color);
+            border: 1px solid #d4c9a8;
             border-radius: 5px;
-            background-color: #2a2a2a;
+            background-color: rgba(255, 255, 255, 0.7);
+            position: relative;
         }
 
         .caption-section {
@@ -57,42 +73,84 @@
         }
 
         .caption-section h2 {
-            color: var(--accent-color);
+            color: #333;
             margin-bottom: 10px;
             font-size: 1.5em;
+            font-family: 'Brush Script MT', cursive;
         }
 
         textarea {
             width: 100%;
             min-height: 100px;
-            padding: 10px;
-            background-color: #333;
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 1px solid #d4c9a8;
+            color: #333;
             font-family: inherit;
             resize: vertical;
             margin-bottom: 10px;
+            border-radius: 5px;
         }
 
         .date {
-            color: #888;
+            color: #666;
             font-size: 0.9em;
             margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .image-upload {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            margin: 10px 0;
+            border-radius: 5px;
+            display: none;
         }
 
         .save-btn {
-            background-color: var(--accent-color);
+            background-color: #8b7355;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 25px;
             border-radius: 5px;
             cursor: pointer;
             font-family: inherit;
             transition: background-color 0.3s;
+            display: block;
+            margin: 20px auto;
+            font-size: 1.1em;
         }
 
         .save-btn:hover {
-            background-color: #ff1493;
+            background-color: #6b4f3d;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            margin: 10px 0;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            display: none;
+        }
+
+        .file-input-label {
+            background-color: #8b7355;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+
+        .file-input-label:hover {
+            background-color: #6b4f3d;
         }
 
         @media (max-width: 600px) {
@@ -108,19 +166,27 @@
 </head>
 <body>
     <div class="container">
-        <h1>My Emo Journal</h1>
+        <h1>My Personal Diary</h1>
         
         <div class="journal-entry">
             <div class="date" id="current-date"></div>
             
-            <div class="caption-section">
-                <h2>English Caption</h2>
-                <textarea id="english-caption" placeholder="Write your thoughts in English..."></textarea>
+            <div class="image-upload">
+                <div class="file-input-wrapper">
+                    <input type="file" id="image-upload" accept="image/*" onchange="previewImage(event)">
+                    <label for="image-upload" class="file-input-label">Add Photo</label>
+                </div>
+                <img id="image-preview" class="image-preview" alt="Preview">
             </div>
 
             <div class="caption-section">
-                <h2>Filipino Caption</h2>
-                <textarea id="filipino-caption" placeholder="Isulat ang iyong mga saloobin sa Filipino..."></textarea>
+                <h2>Today's Thoughts</h2>
+                <textarea id="english-caption" placeholder="Write your thoughts here..."></textarea>
+            </div>
+
+            <div class="caption-section">
+                <h2>Mga Saloobin</h2>
+                <textarea id="filipino-caption" placeholder="Isulat ang iyong mga saloobin dito..."></textarea>
             </div>
 
             <button class="save-btn" onclick="saveEntry()">Save Entry</button>
@@ -138,10 +204,27 @@
             day: 'numeric' 
         });
 
+        // Image preview function
+        function previewImage(event) {
+            const preview = document.getElementById('image-preview');
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function() {
+                preview.src = reader.result;
+                preview.style.display = 'block';
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }
+
         // Save entry function
         function saveEntry() {
             const englishCaption = document.getElementById('english-caption').value;
             const filipinoCaption = document.getElementById('filipino-caption').value;
+            const imagePreview = document.getElementById('image-preview');
             
             // Here you can add functionality to save the entries
             // For now, we'll just show an alert
