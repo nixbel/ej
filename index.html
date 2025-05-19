@@ -156,8 +156,8 @@
             <div class="date" id="current-date"></div>
             
             <div class="image-display">
-                <!-- Using placeholder images since we can't actually upload the user's images here -->
-                <img src="/api/placeholder/600/400" alt="Diary image" class="diary-image" id="diary-image" onclick="changeImage()">
+                <!-- Starting with the first image in the user's collection -->
+                <img src="buwaya.jpg" alt="Diary image" class="diary-image" id="diary-image" onclick="changeImage()">
             </div>
 
             <div class="caption-section">
@@ -181,12 +181,18 @@
             day: 'numeric' 
         });
         
-        // Image slideshow functionality
+        // Image slideshow functionality with user's actual image filenames
         const images = [
-            "/api/placeholder/600/400",
-            "/api/placeholder/600/400?text=Image+2",
-            "/api/placeholder/600/400?text=Image+3",
-            "/api/placeholder/600/400?text=Image+4"
+            "buwaya.jpg",
+            "cockroach.jpg",
+            "Elevator.jpg",
+            "Mayon 1.jpg",
+            "Mayon 2.jpg",
+            "Mayon 3.jpg",
+            "Mayon 4.jpg",
+            "mirror.jpg",
+            "Sumlang Lake.jpg",
+            "wow.jpg"
         ];
         
         let currentImageIndex = 0;
