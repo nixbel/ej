@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emo Journal</title>
+    <style>
+        :root {
+            --dark-bg: #1a1a1a;
+            --text-color: #e0e0e0;
+            --accent-color: #ff69b4;
+            --border-color: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #222;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--accent-color);
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .journal-entry {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background-color: #2a2a2a;
+        }
+
+        .caption-section {
+            margin-bottom: 20px;
+        }
+
+        .caption-section h2 {
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            font-size: 1.5em;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 10px;
+            background-color: #333;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            font-family: inherit;
+            resize: vertical;
+            margin-bottom: 10px;
+        }
+
+        .date {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .save-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background-color 0.3s;
+        }
+
+        .save-btn:hover {
+            background-color: #ff1493;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>My Emo Journal</h1>
+        
+        <div class="journal-entry">
+            <div class="date" id="current-date"></div>
+            
+            <div class="caption-section">
+                <h2>English Caption</h2>
+                <textarea id="english-caption" placeholder="Write your thoughts in English..."></textarea>
+            </div>
+
+            <div class="caption-section">
+                <h2>Filipino Caption</h2>
+                <textarea id="filipino-caption" placeholder="Isulat ang iyong mga saloobin sa Filipino..."></textarea>
+            </div>
+
+            <button class="save-btn" onclick="saveEntry()">Save Entry</button>
+        </div>
+    </div>
+
+    <script>
+        // Set current date
+        const dateElement = document.getElementById('current-date');
+        const now = new Date();
+        dateElement.textContent = now.toLocaleDateString('en-US', { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        });
+
+        // Save entry function
+        function saveEntry() {
+            const englishCaption = document.getElementById('english-caption').value;
+            const filipinoCaption = document.getElementById('filipino-caption').value;
+            
+            // Here you can add functionality to save the entries
+            // For now, we'll just show an alert
+            alert('Entry saved! (Note: This is just a demo - entries are not actually saved)');
+        }
+    </script>
+</body>
+</html> 
