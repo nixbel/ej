@@ -1,206 +1,289 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Personal Diary</title>
-    <style>
-        :root {
-            --dark-bg: #1a1a1a;
-            --text-color: #e0e0e0;
-            --accent-color: #ff69b4;
-            --border-color: #333;
-            --paper-bg: #fff9e6;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Read!</title>
+  <style>
+    :root {
+      --dark-bg: #1a1a1a;
+      --text-color: #e0e0e0;
+      --accent-color: #ff69b4;
+      --border-color: #333;
+      --paper-bg: #fff9e6;
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        body {
-            background-color: var(--dark-bg);
-            color: #333;
-            font-family: 'Courier New', monospace;
-            line-height: 1.6;
-            padding: 20px;
-            background-image: url('https://www.transparenttextures.com/patterns/paper.png');
-        }
+    body {
+      background-color: var(--dark-bg);
+      font-family: 'Courier New', monospace;
+      padding: 20px;
+      background-image: url('https://www.transparenttextures.com/patterns/paper.png');
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: var(--paper-bg);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-            position: relative;
-        }
+    .envelope-container {
+      text-align: center;
+    }
 
-        .container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%),
-                        linear-gradient(-45deg, rgba(255,255,255,0.1) 25%, transparent 25%);
-            pointer-events: none;
-        }
+    .envelope-container img {
+      max-width: 250px;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
 
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 30px;
-            font-size: 2.5em;
-            font-family: 'Brush Script MT', cursive;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
+    .envelope-container img:hover {
+      transform: scale(1.05);
+    }
 
-        .journal-entry {
-            margin-bottom: 40px;
-            padding: 20px;
-            border: 1px solid #d4c9a8;
-            border-radius: 5px;
-            background-color: rgba(255, 255, 255, 0.7);
-            position: relative;
-        }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: var(--paper-bg);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      position: relative;
+      display: none;
+      animation: fadeIn 1s forwards;
+    }
 
-        .caption-section {
-            margin-bottom: 20px;
-        }
+    .container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%),
+                  linear-gradient(-45deg, rgba(255,255,255,0.1) 25%, transparent 25%);
+      pointer-events: none;
+    }
 
-        .caption-section h2 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 1.5em;
-            font-family: 'Brush Script MT', cursive;
-        }
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
+      font-size: 2.3em;
+      font-family: 'Brush Script MT', cursive;
+    }
 
-        textarea {
-            width: 100%;
-            min-height: 100px;
-            padding: 15px;
-            background-color: rgba(255, 255, 255, 0.9);
-            border: 1px solid #d4c9a8;
-            color: #333;
-            font-family: inherit;
-            resize: vertical;
-            margin-bottom: 10px;
-            border-radius: 5px;
-        }
+    .journal-entry {
+      margin-bottom: 40px;
+      padding: 20px;
+      border: 1px solid #d4c9a8;
+      border-radius: 5px;
+      background-color: rgba(255, 255, 255, 0.8);
+      position: relative;
+    }
 
-        .date {
-            color: #666;
-            font-size: 0.9em;
-            margin-bottom: 15px;
-            font-style: italic;
-        }
+    .caption-section {
+      margin-bottom: 20px;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+    }
 
-        .image-display {
-            text-align: center;
-            margin: 20px 0;
-        }
+    .date {
+      color: #666;
+      font-size: 0.9em;
+      margin-bottom: 15px;
+      font-style: italic;
+      text-align: center;
+    }
 
-        .diary-image {
-            max-width: 100%;
-            max-height: 400px;
-            border-radius: 5px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            border: 10px solid white;
-            transform: rotate(-2deg);
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        
-        .diary-image:hover {
-            transform: rotate(0deg) scale(1.02);
-        }
+    .image-display {
+      text-align: center;
+      margin: 20px 0;
+    }
 
-        .save-btn {
-            background-color: #8b7355;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-family: inherit;
-            transition: background-color 0.3s;
-            display: block;
-            margin: 20px auto;
-            font-size: 1.1em;
-        }
+    .diary-image {
+      max-width: 100%;
+      max-height: 400px;
+      border-radius: 5px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      border: 10px solid white;
+      transform: rotate(-2deg);
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
 
-        .save-btn:hover {
-            background-color: #6b4f3d;
-        }
+    .diary-image:hover {
+      transform: rotate(0deg) scale(1.02);
+    }
 
-        @media (max-width: 600px) {
-            .container {
-                padding: 15px;
-            }
-            
-            h1 {
-                font-size: 2em;
-            }
-        }
-    </style>
+    .lang-toggle-btn {
+      padding: 10px 20px;
+      font-family: 'Courier New';
+      border: none;
+      background-color: var(--accent-color);
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+      .diary-image {
+        max-height: 250px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 15px;
+      }
+      h1 {
+        font-size: 1.5em;
+      }
+      .lang-toggle-btn {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>My Personal Diary</h1>
-        
-        <div class="journal-entry">
-            <div class="date" id="current-date"></div>
-            
-            <div class="image-display">
-                <!-- Starting with the first image in the user's collection -->
-                <img src="buwaya.jpg" alt="Diary image" class="diary-image" id="diary-image" onclick="changeImage()">
-            </div>
 
-            <div class="caption-section">
-                <p class="english-caption">The sun sets over the horizon, painting the sky with hues of orange and pink. In moments like these, I find peace and reflection on the day's journey. Nature's canvas reminds me that endings can be beautiful too.</p>
-            </div>
+  <!-- Envelope -->
+  <div class="envelope-container" id="envelope-container">
+    <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" alt="Envelope" onclick="openDiary()" />
+    <p style="color: white; margin-top: 15px;">Click here!</p>
+  </div>
 
-            <div class="caption-section">
-                <p class="filipino-caption">Lumubog ang araw sa may dagat, pinipintahan ang kalangitan ng kulay kahel at rosas. Sa mga ganitong sandali, nakakatagpo ako ng kapayapaan at pagmumuni-muni sa paglalakbay ng araw. Ang likhang-sining ng kalikasan ay nagpapaalala sa akin na maging ang mga wakas ay maaaring maging maganda rin.</p>
-            </div>
-        </div>
+  <!-- Main Container -->
+  <div class="container" id="diary-container">
+    <h1>To: Eddie Lujares Jr.</h1>
+
+    <div style="text-align: center;">
+      <button class="lang-toggle-btn" onclick="toggleLanguage()">Switch to Filipino</button>
     </div>
 
-    <script>
-        // Set current date
-        const dateElement = document.getElementById('current-date');
-        const now = new Date();
-        dateElement.textContent = now.toLocaleDateString('en-US', { 
-            weekday: 'long', 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric' 
-        });
-        
-        // Image slideshow functionality with user's actual image filenames
-        const images = [
-            "buwaya.jpg",
-            "cockroach.jpg",
-            "Elevator.jpg",
-            "Mayon 1.jpg",
-            "Mayon 2.jpg",
-            "Mayon 3.jpg",
-            "Mayon 4.jpg",
-            "mirror.jpg",
-            "Sumlang Lake.jpg",
-            "wow.jpg"
-        ];
-        
-        let currentImageIndex = 0;
-        
-        function changeImage() {
-            currentImageIndex = (currentImageIndex + 1) % images.length;
-            document.getElementById('diary-image').src = images[currentImageIndex];
-        }
-    </script>
+    <div class="journal-entry">
+      <div class="date" id="current-date"></div>
+
+      <div class="image-display">
+        <img src="" alt="Diary image" class="diary-image" id="diary-image" onclick="changeImage()">
+      </div>
+
+      <div class="caption-section" id="english-caption">
+        <p>EJ, I just want to express how truly grateful I am for all the moments we've shared during your visit here in the Philippines. Every experience we had—whether big or small—meant so much to me, and I’ll carry those memories with me for the rest of my life.
+
+            Your stay in Bicol, especially in Nabua, Camarines Sur, was such a meaningful time. I saw how open you were to the culture and how easily you connected with everyone around you. One of the most unforgettable experiences was our trip to Sumlang Lake in Albay—the peaceful atmosphere, the stunning view, and the calmness of the water made it all so special. And how can I forget our thrilling ATV ride going to the Mayon Volcano view spot? It was dusty, bumpy, and exhausting—but absolutely worth it. We were like carefree kids again, just enjoying the adventure and the moment.
+            
+            Then came our journey to Manila—another chapter full of fun and unforgettable memories. Visiting the Manila Ocean Park brought out our inner child as we marveled at the sea creatures, and our time at the museum gave us a deeper appreciation for history and art. Even our mall trips were filled with laughter and random stories that made everything more special. It didn’t matter where we went—what made it amazing was that we were together.
+            
+            Thank you, EJ, for your companionship, for being present, and for giving your time and energy to create moments like these with me. You’re not just a cousin to me—you’re a real friend, someone I can count on and feel comfortable with. I feel so lucky to have been a part of your journey here in the Philippines.
+            
+            Until we meet again, please take care of yourself and continue chasing your dreams. Always remember that you have someone here who appreciates you and treasures everything we shared.
+            
+            We love you, EJ. Thank you for everything.</p>
+      </div>
+
+      <div class="caption-section" id="filipino-caption" style="opacity: 0; height: 0; overflow: hidden;">
+        <p>EJ, sobra akong nagpapasalamat sa bawat sandali na magkasama tayo sa iyong pagbisita dito sa Pilipinas. Hindi biro ang mga pinagsamahan natin—lahat ng karanasan, pagod, tawa, at alaala ay sobrang espesyal sa akin, at habang buhay kong babaunin.
+
+            Napakasaya ng naging stay mo sa Bicol, lalo na sa Nabua, Camarines Sur. Ramdam ko kung gaano ka naging bukas sa kultura at pakikisalamuha sa mga tao dito. Hindi ko rin malilimutan ang paglalakbay natin sa Sumlang Lake sa Albay—ang napakagandang tanawin, ang sariwang hangin, at siyempre, ang bonding natin habang nag-a-admire ng ganda ng kalikasan. At ‘yung ATV rides natin papunta sa spot ng Mayon Volcano? Grabe, ang saya! Kahit puro alikabok at medyo nakakapagod, worth it ang lahat dahil kasama kita. Para tayong mga bata na walang ibang iniisip kundi ang adventure at kasiyahan.
+            
+            At siyempre, ang lakad natin sa Manila—isang bagong yugto na naman ng adventure! Manila Ocean Park, kung saan parang bumalik tayo sa pagkabata habang tinitingnan ang mga isda at sea creatures; yung museum na parang nagbigay sa atin ng panibagong kaalaman at appreciation sa kasaysayan at sining; at ang simpleng gala sa mall na puno pa rin ng tawanan at kwentuhan. Kahit saan tayo magpunta, naging masaya dahil magkasama tayo.
+            
+            EJ, maraming salamat sa pakikisama, sa pagiging present, at sa pagbibigay ng oras at espasyo para sa mga ganitong karanasang hindi matutumbasan. Salamat sa pagiging hindi lang isang pinsan, kundi isang tunay na kaibigan na masasandalan. Napakalaking bagay para sa akin na naging bahagi ako ng iyong paglalakbay dito sa Pilipinas.
+            
+            Hanggang sa muli nating pagkikita. Huwag mong kalilimutan na may isang taong laging nagpapahalaga sa'yo at sa ating pinagsamahan. Ingat ka palagi, at sana'y magtagumpay ka sa lahat ng tatahakin mong landas.
+            
+            Mahal ka namin, EJ, at maraming salamat sa lahat-lahat!</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const images = [
+      "D:/ej/To EJ/buwaya.jpg",
+      "D:/ej/To EJ/cockroach.jpg",
+      "D:/ej/To EJ/Elevator.jpg",
+      "D:/ej/To EJ/Mayon 1.jpg",
+      "D:/ej/To EJ/Mayon 2.jpg",
+      "D:/ej/To EJ/Mayon 3.jpg",
+      "D:/ej/To EJ/Mayon 4.jpg",
+      "D:/ej/To EJ/mirror.jpg",
+      "D:/ej/To EJ/Sumlang Lake.jpg",
+      "D:/ej/To EJ/wow.jpg"
+    ];
+
+    let currentImageIndex = Math.floor(Math.random() * images.length);
+    let isEnglish = true;
+
+    function openDiary() {
+      document.getElementById("envelope-container").style.display = "none";
+      const diary = document.getElementById("diary-container");
+      diary.style.display = "block";
+
+      // Set image
+      document.getElementById("diary-image").src = images[currentImageIndex];
+
+      // Set date
+      const now = new Date();
+      document.getElementById("current-date").textContent = now.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    }
+
+    function changeImage() {
+      currentImageIndex = (currentImageIndex + 1) % images.length;
+      document.getElementById("diary-image").src = images[currentImageIndex];
+    }
+
+    function toggleLanguage() {
+      const english = document.getElementById('english-caption');
+      const filipino = document.getElementById('filipino-caption');
+      const button = document.querySelector('.lang-toggle-btn');
+
+      if (isEnglish) {
+        // Fade out English
+        english.style.opacity = 0;
+        english.style.height = 0;
+        english.style.overflow = 'hidden';
+
+        // Fade in Filipino
+        filipino.style.opacity = 1;
+        filipino.style.height = 'auto';
+        filipino.style.overflow = 'visible';
+
+        button.textContent = 'Switch to English';
+      } else {
+        filipino.style.opacity = 0;
+        filipino.style.height = 0;
+        filipino.style.overflow = 'hidden';
+
+        english.style.opacity = 1;
+        english.style.height = 'auto';
+        english.style.overflow = 'visible';
+
+        button.textContent = 'Switch to Filipino';
+      }
+
+      isEnglish = !isEnglish;
+    }
+  </script>
 </body>
 </html>
